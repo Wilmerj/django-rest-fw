@@ -9,7 +9,7 @@ class Patient(models.Model):
     email = models.EmailField()
     address = models.TextField()
     medical_history = models.TextField()
-
+    is_declined = models.BooleanField(default=False)
 
 class Insurance(models.Model):
     patient = models.ForeignKey(
