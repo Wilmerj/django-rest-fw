@@ -31,3 +31,9 @@ class PatientViewSet(viewsets.ModelViewSet):
         return Response(
             {"message": "Patient is now accepted", "status": status.HTTP_200_OK}
         )
+
+    @action(methods=["get"], detail=True, url_path="get-medical-history")
+    def get_medical_history(self, request, pk):
+        patient = self.get_object()
+        medical_history = patient.medical_history
+        return Response({"medical_history": medical_history}, status=status.HTTP_200_OK)
