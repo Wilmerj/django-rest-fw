@@ -1,9 +1,11 @@
 from rest_framework import serializers
 from .models import Patient, Insurance, MedicalRecord
 from bookings.serializers import AppointmentSerializer
+from datetime import date
 
 class PatientSerializer(serializers.ModelSerializer):
     appointments = AppointmentSerializer(many=True, read_only=True)
+    age = serializers.SerializerMethodField()
 
     class Meta:
         model = Patient
@@ -17,7 +19,11 @@ class PatientSerializer(serializers.ModelSerializer):
             "address",
             "medical_history",
             "appointments",
+            "age",
         ]
+
+    def get_age(self, obj):
+        return (date.today() - obj.date_of_birth).days // 365
 
     def validate(self, attrs):
         if "@example.com" not in attrs["email"]:
