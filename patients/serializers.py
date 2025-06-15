@@ -7,6 +7,15 @@ class PatientSerializer(serializers.ModelSerializer):
         model = Patient
         fields = "__all__"
 
+    def validate(self, attrs):
+        if "@example.com" not in attrs["email"]:
+            raise serializers.ValidationError("Domain must contain @example.com")
+        if attrs["is_declined"] == True and len(attrs["medical_history"]) > 0:
+            raise serializers.ValidationError(
+                "Patient cannot be declined without medical history"
+            )
+        return super().validate(attrs)
+
 
 class InsuranceSerializer(serializers.ModelSerializer):
     class Meta:
